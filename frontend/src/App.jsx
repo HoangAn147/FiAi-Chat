@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import ChatAppJSON from './ChatAppABI.json';
 import './App.css';
-import { FiSearch, FiEdit2, FiTrash2, FiX, FiCheck } from 'react-icons/fi'; // Thêm icon FiCheck
+import { FiSearch, FiEdit2, FiTrash2, FiX, FiCheck } from 'react-icons/fi'; 
 import { IconCall, IconCamera, IconMessage, IconSetting, IconMessageAdd, IconVideo, IconSend, IconAddSquare, IconCallChatHeader } from './assets/icons';
 
 // --- NHỚ DÁN LẠI ĐỊA CHỈ CONTRACT ĐÚNG CỦA BẠN VÀO ĐÂY ---
-const CONTRACT_ADDRESS = "0x65D2176c2168e11120F485ffF922d9F0a88fE3C3";
+const CONTRACT_ADDRESS = "0x65D2176c2168e11120F485ffF922d9F0a88fE3C3"; 
 const CHAT_ABI = ChatAppJSON.abi;
 
 function App() {
@@ -77,9 +77,7 @@ function App() {
       { sender: "me", content: "Yes, definitely. 5 PM right?", timestamp: Date.now() - 180000 },
       { sender: "Michael", content: "Me too! See you then.", timestamp: Date.now() - 60000 },
     ],
-    // ... các user khác
   };
-
 
   const getUserName = (address) => {
       if (!address) return "";
@@ -117,7 +115,7 @@ function App() {
     }
   }, []);
 
-// --- CORE: Load danh bạ & Fix lỗi Timestamp khi F5 ---
+  // --- CORE: Load danh bạ & Fix lỗi Timestamp khi F5 ---
   const loadContactsFromBlockchain = async () => {
     if (!chatContract || !currentAccount) return;
     try {
@@ -226,12 +224,12 @@ function App() {
               if (history && history.length > 0) {
                   const actualLastMsg = history[history.length - 1];
                   
-                  // Update nội dung
                   if (actualLastMsg.isDeleted) {
                       chat.lastMessage = "Message deleted";
                   } else {
                       chat.lastMessage = actualLastMsg.content;
                   }
+
                   chat.timestamp = Number(actualLastMsg.timestamp) * 1000;
               }
           } catch (err) {
@@ -251,14 +249,11 @@ function App() {
     } catch (error) { console.error("Lỗi quét history:", error); }
   };
 
-
   // --- CORE: Select Chat & Reset Edit Mode ---
   const selectChat = (userAddress) => {
         setReceiver(userAddress); 
         setSearchQuery(""); 
         setIsSearchFocused(false);
-        
-        // QUAN TRỌNG: Reset chế độ sửa khi đổi user
         setEditingMsgIndex(null); 
         setInputMsg("");
 
@@ -312,9 +307,8 @@ function App() {
           console.log("Đang sửa tin nhắn ID:", editingMsgIndex);
           const tx = await chatContract.editMessage(receiver, editingMsgIndex, inputMsg);
           setInputMsg("");
-          setEditingMsgIndex(null); // Tắt chế độ sửa ngay
+          setEditingMsgIndex(null);
           await tx.wait();
-          // Event Listener sẽ tự update UI
       } else {
           // --- CASE GỬI MỚI ---
           console.log("Đang gửi tin mới...");
@@ -348,7 +342,7 @@ function App() {
       const data = await chatContract.getChatHistory(partnerAddress);
       
       const formattedMessages = data.map((msg, index) => ({
-        id: index, 
+        id: index,
         sender: msg.sender, 
         content: msg.content, 
         timestamp: Number(msg.timestamp),
@@ -404,14 +398,12 @@ function App() {
         const partnerAddr = partner.toLowerCase();
         const myAddr = currentAccount.toLowerCase();
         
-        // Reload chat nếu đang mở hội thoại này
         const otherPerson = senderAddr === myAddr ? partnerAddr : senderAddr;
         if (receiverRef.current.toLowerCase() === otherPerson) {
             fetchChatHistory(receiverRef.current, false);
         }
     };
     
-    // Riêng cho Edit/Delete cần update Sidebar preview
     const onDeletedSidebar = (sender, partner) => {
         const otherPerson = sender.toLowerCase() === currentAccount.toLowerCase() ? partner : sender;
         updateSidebarPreview(otherPerson, "Message deleted");
@@ -422,12 +414,8 @@ function App() {
     };
 
     chatContract.on("NewMessage", onNewMessage);
-    
-    // Lắng nghe để reload khung chat
     chatContract.on("MessageDeleted", onMessageUpdated);
     chatContract.on("MessageEdited", onMessageUpdated);
-    
-    // Lắng nghe để update sidebar (tách riêng cho rõ)
     chatContract.on("MessageDeleted", (s, p, i) => onDeletedSidebar(s, p));
     chatContract.on("MessageEdited", (s, p, i, c) => onEditedSidebar(s, p, i, c));
 
@@ -447,6 +435,23 @@ function App() {
   );
 
   const resolvedSearchTarget = resolveSearchInput(searchQuery);
+
+  // --- LOGIC MỚI: KIỂM TRA ĐIỀU KIỆN DISABLE NÚT GỬI ---
+  const isSendDisabled = () => {
+      // 1. Chưa chọn người nhận hợp lệ
+      if (!ethers.isAddress(receiver)) return true;
+      // 2. Nội dung rỗng
+      if (!inputMsg.trim()) return true;
+
+      // 3. Nếu đang sửa (Editing mode) - Chặn nếu nội dung chưa thay đổi
+      if (editingMsgIndex !== null) {
+          const originalMsg = messages.find(m => m.id === editingMsgIndex);
+          if (originalMsg && inputMsg === originalMsg.content) {
+              return true;
+          }
+      }
+      return false;
+  };
 
   return (
     <div className="app-wrapper">
@@ -580,7 +585,7 @@ function App() {
                                   <div className="msg-actions">
                                       <button onClick={() => {
                                           setInputMsg(m.content);
-                                          setEditingMsgIndex(m.id); // Set ID tin nhắn muốn sửa
+                                          setEditingMsgIndex(m.id); 
                                       }} title="Edit"><FiEdit2 size={13}/></button>
                                       <button onClick={() => deleteMessage(m.id)} title="Delete" style={{color:'#ff4d4d'}}><FiTrash2 size={13}/></button>
                                   </div>
@@ -593,13 +598,11 @@ function App() {
 
                 {receiver && !searchQuery && !isSearchFocused && (
                 <div className="input-wrapper">
-                    {/* Hiển thị chỉ báo ĐANG SỬA */}
                     {editingMsgIndex !== null && <div className="editing-indicator">Editing message...</div>}
                     
                     <div className="input-pill" style={editingMsgIndex !== null ? {border: '1px solid #0A84FF', boxShadow: '0 0 15px rgba(10,132,255,0.3)'} : {}}>
                         
                         {editingMsgIndex !== null ? (
-                            // Nút HỦY Sửa (X)
                             <button className="plus-btn" onClick={() => {
                                 setEditingMsgIndex(null);
                                 setInputMsg("");
@@ -616,12 +619,20 @@ function App() {
                                 placeholder={editingMsgIndex !== null ? "Type new content..." : `Message ${getUserName(receiver)}...`}
                                 value={inputMsg}
                                 onChange={e => setInputMsg(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                                onKeyDown={(e) => {
+                                    // Chặn gửi nếu nút đang bị disable
+                                    if (e.key === 'Enter' && !isSendDisabled()) {
+                                        handleSendMessage();
+                                    }
+                                }}
                                 disabled={!ethers.isAddress(receiver)} 
                             />
                         </div>
-                        <button className="send-btn-round" onClick={handleSendMessage} disabled={!ethers.isAddress(receiver)}>
-                             {/* Đổi Icon Gửi thành Icon Check khi đang sửa */}
+                        <button 
+                            className="send-btn-round" 
+                            onClick={handleSendMessage} 
+                            disabled={isSendDisabled()} 
+                        >
                              {editingMsgIndex !== null ? <FiCheck size={22}/> : <IconSend />}
                         </button>
                     </div>

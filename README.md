@@ -67,6 +67,8 @@ npm run dev
 ```
 * Sau đó truy cập vào địa chỉ local được cung cấp (thường là http://localhost:5173).
 
+* Ngoài ra có thể truy cập vào địa chỉ đã được deploy: https://fi-ai-chat-1nmx.vercel.app/
+
 ### 4. Cách sử dụng
 
 * Đảm bảo ví MetaMask của bạn đang chọn mạng Sepolia.
