@@ -8,14 +8,14 @@
 Giao diện người dùng thân thiện, hiển thị lịch sử tin nhắn giữa các địa chỉ ví.
 
 <p align="center">
-  <img src="./assets/demo-chat-ui.png" alt="Giao diện Chat chính" width="800">
+  <img src="./frontend/src/assets/demo-chat-ui.png" alt="Giao diện Chat chính" width="800">
 </p>
 
 ### 2. Tương tác với Blockchain (Metamask)
 Mỗi tin nhắn gửi đi là một giao dịch trên Blockchain, được xác thực an toàn thông qua ví Metamask.
 
 <p align="center" style="display: flex; justify-content: center; gap: 20px;">
-  <img src="./assets/demo-metamask.png" alt="Xác nhận Metamask" width="400">
+  <img src="./frontend/src/assets/demo-metamask.png" alt="Xác nhận Metamask" width="400">
 </p>
 
 
@@ -52,7 +52,7 @@ Mỗi tin nhắn gửi đi là một giao dịch trên Blockchain, được xác
 * Một ít ETH trên mạng **Sepolia Testnet** để làm phí gas (Có thể lấy tại các Faucet).
 
 ### 2. Cài đặt
-bash
+```bash
 # Clone repository về máy
 git clone https://github.com/HoangAn147/FiAi-Chat.git
 
@@ -60,11 +60,13 @@ git clone https://github.com/HoangAn147/FiAi-Chat.git
 
 # Cài đặt các thư viện phụ thuộc
 npm install
-
+```
 ### 3. Chạy ứng dụng
-Bash
+```bash
 npm run dev
+```
 * Sau đó truy cập vào địa chỉ local được cung cấp (thường là http://localhost:5173).
+
 ### 4. Cách sử dụng
 
 * Đảm bảo ví MetaMask của bạn đang chọn mạng Sepolia.
