@@ -1,0 +1,9 @@
+export { ReactComponent as IconCamera } from './svg/camera.svg';
+export { ReactComponent as IconCall } from './svg/call.svg';
+export { ReactComponent as IconMessage } from './svg/message.svg';
+export { ReactComponent as IconSetting } from './svg/setting2.svg';
+export { ReactComponent as IconMessageAdd } from './svg/messageadd.svg';
+export { ReactComponent as IconVideo } from './svg/video.svg';
+export { ReactComponent as IconAddSquare } from './svg/addsquare.svg';
+export { ReactComponent as IconSend } from './svg/send.svg';
+export { ReactComponent as IconCallChatHeader } from './svg/call_chatheader.svg';
