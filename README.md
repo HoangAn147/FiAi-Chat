@@ -79,3 +79,14 @@ npm run dev
 
 * Xác nhận giao dịch trên cửa sổ MetaMask hiện ra.
 
+### 5. Chat 1-1
+
+* Để test chat 1-1 trực tiếp khuyến khích mở 2 trình duyệt Chrome và Edge 
+
+* Đảm bảo cả 2 trình duyệt đều được Connect Wallet, chọn mạng Sepolia và túi đều có sẵn ví ETH
+
+* Lần đầu connect ví sẽ không thấy tên nhau nên phải vô thanh search tìm kiếm người đó mới chat được
+
+* Có thể tìm kiếm bằng cách điền ADDRESS 0x... hoặc bằng tên thân thuộc (có thể chỉnh trong code nếu muốn bằng cách thêm ADDRESS_BOOK)
+
+* Tận hưởng và test các chính năng chat 1-1 như gửi tin nhắn, đọc tin nhắn, xóa tin nhắn và chỉnh sửa tin nhắn
